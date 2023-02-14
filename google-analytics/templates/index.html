@@ -1,0 +1,65 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="container bg-light rounded-3">
+    <!-- cookies warning -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger text-center">
+                This website uses tracking cookies. <b>They can't be turned off.</b>
+            </div>
+        </div>
+    </div>
+    <!-- /cookies warning -->
+
+    <br>
+
+    <!-- header -->
+    <div class="row">
+        <div class="col-12">
+            <h1 class="lead display-1 pb-3">Testing Google Analytics</h1>
+            <p class="lead">
+                A very simple website used for exploring Google Analytics capabilities.                
+            </p>
+        </div>
+    </div>
+    <!-- /header -->
+    
+    <br>
+
+    <!-- buttons -->
+    <div class="row">
+        <div class="col-4">
+            <button id="{{ btn_ids.RED_BTN_ID }}"  type="button" class="btn btn-lg btn-outline-danger rounded-pill">
+                Click me!!
+            </button>
+        </div>
+        
+        <div class="col-4">
+            <button id="{{ btn_ids.YELLOW_BTN_ID }}"  type="button" class="btn btn-lg btn-outline-warning rounded-pill">
+                No, click me!!
+            </button>
+        </div>
+
+        <div class="col-4">
+            <button id="{{ btn_ids.GREEN_BTN_ID }}"  type="button" class="btn btn-lg btn-outline-success rounded-pill">
+                No, me!!
+            </button>
+        </div>
+    </div>
+    <!-- /buttons -->
+
+    <div class="row">
+        <div class="col-12">
+            <p class="lead mt-4 fs-g">(Spoiler alert: clicking the buttons doesn't do anything)</h1>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+{% block footer %}
+    <!-- inherit existing css  -->
+    {{ super() }}
+    
+    <!-- import index.js -->
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "template.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<div class="container p-5 mb-4 bg-light rounded-3">
+    <div class="row">
+        <div class="col-12" id="{{ about_id }}">
+            <h1 class="lead display-1 pb-5">About this site</h1>
+            <p class="lead">
+                This website doesn't really do very much; it mainly exists for experiments with Google Analytics 
+                (e.g. tracking visits, click-throughs etc).
+            </p>
+            <br>
+            <p class="lead">
+                It has a few placeholders, just to differentiate between pages; a graph, a map and a Bootstrap carousel.
+                But that's about it really.
+            </p>
+            <br>
+            <p class="lead">
+                For (minor) interest; the server-side code is built in Python, using the 
+                <a href="https://flask.palletsprojects.com/en/2.0.x/">Flask</a> microframework,
+                and deployed using <a href="https://www.heroku.com/">Heroku</a>.
+                Styling is done with <a href="https://getbootstrap.com/">Bootstrap</a>.
+                Charts are built using <a href="https://www.chartjs.org/">Chart.js</a>, and
+                maps are built using <a href="https://leafletjs.com/">Leaflet.js</a>.
+            </p>
+        </div>
+    </div>                
+</div>
+{% endblock %}

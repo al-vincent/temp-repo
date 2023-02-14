@@ -1,0 +1,38 @@
+{% extends "template.html" %}
+{% block head %}
+    <!-- inherit existing css  -->
+    {{ super() }}
+
+    <!-- leaflet css -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/> 
+{% endblock %}
+{% block title %}Maps{% endblock %}
+{% block content %}
+    <div class="container p-5 mb-4 bg-light rounded-3">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <h1 class="lead display-4">What a shiny map!</h1>
+                <p class="lead">In case you're interested; uses <a href="https://leafletjs.com/">Leaflet</a></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">            
+                <div id="{{ map_id }}"></div>
+            </div>
+        </div>                
+    </div>
+{% endblock %}
+{% block footer %}
+    <!-- inherit existing js  -->
+    {{ super() }}
+
+    <!-- leaflet CDN -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+
+    <!-- map creation script -->
+    <script src="{{ url_for('static', filename='js/maps.js') }}"></script>
+{% endblock %}
