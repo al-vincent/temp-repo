@@ -1,0 +1,50 @@
+
+/* Styles to display the PA 'LED' image behind the main content */
+.page-image {
+    background-image: url("/static/img/pa-elemental-led.png");
+
+    /* Position and center the image to scale nicely on all screens */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+/* Appearing text styles */
+ 
+#intro-id {    
+    animation-name: showUpFadeOut;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+#summary-id {
+    animation-name: showUp;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes showUp {
+    0%, 100% {
+        opacity:0;
+    }
+    10% {
+        opacity:1;
+    }
+    45% {
+        color: black;
+    }
+    55%, 90% {
+        color: red;
+        opacity: 1;
+    }
+}
+
+@keyframes showUpFadeOut {
+    0%, 60%, 100% {
+        opacity:0;
+    }
+    10%, 40% {
+        opacity:1;
+    }
+}

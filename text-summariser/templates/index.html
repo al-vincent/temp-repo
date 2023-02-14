@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
+        crossorigin="anonymous">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+
+        <title>Text Summariser</title>
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/file-zip-fill.svg') }}">
+    </head>
+    <body class="page-image">
+        <div class="container mt-5">
+            <!-- ***************************************************************************************** -->
+            <!-- NAVBAR -->
+
+
+            <!-- /NAVBAR -->
+            <!-- ***************************************************************************************** -->
+
+
+            <!-- ***************************************************************************************** -->
+            <!-- HEADER -->
+            <div class="row mx-1 pt-5 pb-3 mb-4 bg-light rounded-3">
+                <div class="row text-center">
+                    <div class="col">
+                        <h1 class="display-4">Text Summariser</h1>
+                        <p class="lead mt-4 mb-1">
+                            <span id="intro-id">A simple web app that uses pre-trained Transformer models to</span>
+                            <span id="summary-id">automatically summarise text.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- /HEADER -->
+            <!-- ***************************************************************************************** -->
+
+            <!-- ***************************************************************************************** -->
+            <!-- ORIGINAL TEXT -->
+            <div class="row row-cols-2">                                
+                
+                <!-- ** TEXT ENTRY PANEL ** -->                
+                <div class="col">
+                    <div id="{{ html.TEXT_ENTRY.PANEL_ID }}" class="card shadow bg-light">
+                        <div class="card-body">                            
+                            <h2 class="display-6 card-title">
+                                Original text
+                                <img src="{{ url_for('static', filename='img/info-circle.svg') }}" alt="info-circle" 
+                                width="18" data-bs-toggle="modal" data-bs-target="#preview-modal-id">
+                            </h2>
+                            <div class="row mb-1">
+                                <div class="col-10">
+                                    <p>
+                                        Enter the text to be summarised in the box below
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" id="{{ html.TEXT_ENTRY.EXAMPLE_BTN_ID }}" class="btn btn-primary btn-sm">
+                                        Example
+                                    </button>
+                                </div>
+                            </div>                         
+                            <form method="post" id="{{ html.TEXT_ENTRY.FORM_ID }}" class="needs-validation">
+                                
+                                <!-- Text area to show preview -->
+                                <div class="row">
+                                    <textarea name="{{ html.TEXT_ENTRY.NAME }}" id="{{ html.TEXT_ENTRY.ID }}" 
+                                    class="form-control" rows="{{ html.TEXT_ENTRY.ROWS }}" required>{{ original_text }}</textarea>
+                                </div>
+                                <!-- /Text area to show preview -->
+                                
+                                <!-- Summary length bounds and submit button -->
+                                <div class="row mt-3">
+                                    <div class="position-relative">
+                                        <div class="row row-cols-3">
+                                            <div class="col-auto">
+                                                <label class="lead col-form-label" for="{{ html.SUMMARY_SETTINGS.MIN_WORDS.NAME }}">
+                                                    Min words:
+                                                </label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="number" class="form-control" name="{{ html.SUMMARY_SETTINGS.MIN_WORDS.NAME }}" 
+                                                min="{{ html.SUMMARY_SETTINGS.MIN_WORDS.MIN }}" max="{{ html.SUMMARY_SETTINGS.MIN_WORDS.MAX }}" 
+                                                value="{{ html.SUMMARY_SETTINGS.MIN_WORDS.VALUE }}">
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="lead col-form-label" for="{{ html.SUMMARY_SETTINGS.MAX_WORDS.NAME }}">
+                                                    Max words:
+                                                </label>
+                                            </div>
+                                                <div class="col-auto">
+                                                <input type="number" class="form-control" name="{{ html.SUMMARY_SETTINGS.MAX_WORDS.NAME }}" 
+                                                min="{{ html.SUMMARY_SETTINGS.MAX_WORDS.MIN }}" max="{{ html.SUMMARY_SETTINGS.MAX_WORDS.MAX }}" 
+                                                value="{{ html.SUMMARY_SETTINGS.MAX_WORDS.VALUE }}">
+                                            </div>
+                                            <div class="col-auto">
+                                                <input class="btn btn-primary" type="submit" name="{{ html.SUMMARY_SETTINGS.SUMMARISE.NAME }}" 
+                                                value="{{ html.SUMMARY_SETTINGS.SUMMARISE.VALUE }}">
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <!-- /Summary length bounds and submit button -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ORIGINAL TEXT -->
+                <!-- ***************************************************************************************** -->
+
+                <!-- ***************************************************************************************** -->
+                <!-- SUMMARISE PANEL -->
+                <div class="col">
+                    <div id="{{ html.SUMMARISE.ID }}" class="card shadow bg-light">
+                        <div class="card-body">
+                            <h2 class="display-6 card-title">
+                                Summarise
+                                <img src="{{ url_for('static', filename='img/info-circle.svg') }}" alt="info-circle" 
+                                width="18" data-bs-toggle="modal" data-bs-target="#summarise-modal-id">
+                            </h2>
+                            <p class="lead card-text">{{ summary_text }}</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /SUMMARISE PANEL -->
+                <!-- ***************************************************************************************** -->
+                
+            </div>
+            <!-- ********** /BOTTOM ROW ********** -->
+
+
+            <!-- ***************************************************************************************** -->
+            <!-- MODALS -->
+            <!-- ***************************************************************************************** -->
+            <!-- ** PREVIEW MODAL ** -->
+            <div class="modal fade" id="preview-modal-id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Select search results</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>The Preview panel helps you to view the full text returned from the search.</p>
+                        <br>
+                        <p>
+                            Each line of the Results table shows the first 100 characters of the text. However,
+                            anything longer than this will be cut down. The Preview panel shows the full text, 
+                            for the row that the user clicked on.
+                            <br class="mp-0">
+                            <strong>Note:</strong> only a single Article will be returned, even if the number of 
+                            sentences before and after the search string goes over multiple Articles.
+                        </p>
+                        <br>
+                        <p>
+                            Text in the Preview panel can be <strong>edited</strong> by the user if necessary. E.g.
+                            they can delete parts of the Article; add new text; etc. 
+                        </p>                                                   
+                        <br>
+                        <p>
+                            The <code>min words</code> and <code>max words</code> inputs allow the user to set
+                            minimum and maximum bounds for the length of the summary produced.
+                        </p>
+                        <br>
+                        <p>
+                            Clicking the <code>Summarise</code> button will run the auto-summarising model. All
+                            text in the Preview window will be treated as text to be summarised.
+                            <br class="mp-0">
+                            <strong>Note:</strong> the summariser takes ~10 seconds to run, and will take longer
+                            for if the text input has more words. Summaries for longer passages of text are also
+                            less effective than summaries for shorter passages (e.g. &lt200 words).
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- ** /PREVIEW MODAL ** -->
+
+            <!-- ** SUMMARISE MODAL ** -->
+            <div class="modal fade" id="summarise-modal-id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Select search results</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>The Summarise panel displays the final, auto-summarised text.</p>
+                        <br>
+                        <p>
+                            Running the summariser with different input settings will yield different outputs.
+                            This is generally good, as it lets users compare and blend the different summaries
+                            into a single summary that best fits their needs.
+                        </p>
+                        <br>
+                        <pr>
+                            <strong>Note:</strong> the auto-summariser uses some sophisticated AI techniques. However,
+                            FTA text is complex and difficult to summarise effectively, even for a human expert; so some
+                            of the summaries produced may be poor. Testing has shown, though, that in many cases the 
+                            results produced are a readable, accurate summary of the original FTA Articles..
+                        </pr>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- ** /SUMMARISE MODAL ** -->
+
+            <!-- ***************************************************************************************** -->
+            <!-- /MODALS -->
+            <!-- ***************************************************************************************** -->
+
+        </div>
+
+        <!-- ***************************************************************************************** -->
+        <!-- SCRIPTS -->
+
+        <!-- placeholder variables, sent by server and accessible via JavaScript -->
+        <script>
+            const HTML = JSON.parse('{{ html | tojson | safe }}');
+        </script>
+        
+        <!-- Load d3 and Bootstrap JS from CDNs -->
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" 
+        crossorigin="anonymous"></script>
+
+        <!-- Load custom js files -->        
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+        <!-- /SCRIPTS -->
+        <!-- ***************************************************************************************** -->
+    </body>
+</html>
